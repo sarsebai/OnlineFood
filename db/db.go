@@ -1,10 +1,14 @@
 package db
 
 import (
-	"OnlineFood/models"
+	"fmt"
+	"log"
+
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
 )
 
 var DB *gorm.DB
@@ -16,7 +20,21 @@ func Connect() {
 		log.Fatal("Не удалось подключиться к базе:", err)
 	}
 
-	database.AutoMigrate(&models.User{},&models.Food{}, &models.Maker{}, &models.Category{})
-
 	DB = database
+
+	runMigrations(dsn)
+}
+
+func runMigrations(dsn string) {
+	m, err := migrate.New(
+		"file://migrations",
+		fmt.Sprintf("mysql://%s", dsn),
+	)
+	if err != nil {
+		log.Fatal("Ошибка создания экземпляра миграции:", err)
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal("Ошибка выполнения миграций:", err)
+	}
 }
