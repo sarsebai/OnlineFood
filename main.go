@@ -23,13 +23,20 @@ func main() {
 		auth.DELETE("/foods/:id", handlers.DeleteFood)
 
 		auth.GET("/makers", handlers.GetMakers)
+		auth.GET("/makers/:id", handlers.GetMakerByID)
 		auth.POST("/makers", handlers.AddMaker)
+		auth.PUT("/makers/:id", handlers.UpdateMaker)
+		auth.DELETE("/makers/:id", handlers.DeleteMaker)
 
 		auth.GET("/categories", handlers.GetCategories)
+		auth.GET("/categories/:id", handlers.GetCategoryByID)
 		auth.POST("/categories", handlers.AddCategory)
+		auth.PUT("/categories/:id", handlers.UpdateCategory)
+		auth.DELETE("/categories/:id", handlers.DeleteCategory)
 
 		auth.GET("/profile", handlers.GetProfile)
 		auth.PUT("/profile", handlers.UpdateProfile)
+		auth.DELETE("/profile", handlers.DeleteProfile)
 	}
 
 	r.Run(":8088")

@@ -25,6 +25,16 @@ func Connect() {
 	runMigrations(dsn)
 }
 
+func DbConnect() {
+	dsn := "root:root@tcp(localhost:8889)/online_food?charset=utf8mb4&parseTime=True&loc=Local"
+	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Не удалось подключиться к базе:", err)
+	}
+
+	DB = database
+
+}
 func runMigrations(dsn string) {
 	m, err := migrate.New(
 		"file://migrations",
